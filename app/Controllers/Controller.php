@@ -8,24 +8,16 @@ use Psr\Http\Message\ResponseFactoryInterface;
 
 abstract class Controller
 {
-    private ResponseFactoryInterface $responseFactory;
 
     /**
-     * @param ResponseFactoryInterface $responseFactory
-     */
-    public function __construct(ResponseFactoryInterface $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
-
-    /**
+     * @param ResponseInterface $response
      * @param array|null $data
      * @param int $statusCode
      * @return ResponseInterface
      */
-    protected function response(?array $data = null, int $statusCode = 200): ResponseInterface
+    protected function response(ResponseInterface $response, ?array $data = null, int $statusCode = 200): ResponseInterface
     {
-        $responseInterface = $this->responseFactory->createResponse($statusCode)->withHeader('Content-Type', 'application/json');
+        $responseInterface = $response->withHeader('Content-Type', 'application/json');
         $responseInterface->getBody()->write(json_encode($data));
         return $responseInterface;
     }

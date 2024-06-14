@@ -4,22 +4,27 @@ require '../vendor/autoload.php';
 
 use Jgut\Slim\Routing\AppFactory;
 use Jgut\Slim\Routing\Configuration;
-use DI\Container;
+use DI\ContainerBuilder;
+use function DI\autowire;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..', '.env');
 $dotenv->load();
 
-// Create Container using PHP-DIcd
-$container = new Container();
+$containerBuilder = new ContainerBuilder();
 
-// Set ResponseFactoryInterface in container
-$container->set(\Psr\Http\Message\ResponseFactoryInterface::class, function () {
-    return new Slim\Psr7\Factory\ResponseFactory();
-});
+$containerBuilder->addDefinitions([
+    'App\\' => autowire(),
 
-$container->set('db', require __DIR__ . '/../config/database.php');
+    \Psr\Http\Message\ResponseFactoryInterface::class => \DI\create(Slim\Psr7\Factory\ResponseFactory::class),
 
-// Set the container to create the App with the factory
+    'db' => function () {
+        return require __DIR__ . '/../config/database.php';
+    },
+]);
+$containerBuilder->useAutowiring(true);
+
+$container = $containerBuilder->build();
+
 \Slim\Factory\AppFactory::setContainer($container);
 
 $configuration = new Configuration([
@@ -27,12 +32,10 @@ $configuration = new Configuration([
 ]);
 AppFactory::setRouteCollectorConfiguration($configuration);
 
-// Instantiate the app
 $app = AppFactory::create();
 
 $database = $container->get('db');
 
-// Set up Eloquent ORM
 $capsule = new Illuminate\Database\Capsule\Manager();
 $capsule->addConnection($database['db']);
 $capsule->setAsGlobal();
@@ -40,8 +43,5 @@ $capsule->bootEloquent();
 
 $routeCollector = $app->getRouteCollector();
 $responseFactory = $app->getResponseFactory();
-
-// Register routes
-$routeCollector->registerRoutes();
 
 $app->run();
