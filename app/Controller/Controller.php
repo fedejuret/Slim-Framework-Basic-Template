@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
 use Slim\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;

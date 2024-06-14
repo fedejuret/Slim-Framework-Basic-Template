@@ -13,8 +13,6 @@ $dotenv->load();
 $containerBuilder = new ContainerBuilder();
 
 $containerBuilder->addDefinitions([
-    'App\\' => autowire(),
-
     \Psr\Http\Message\ResponseFactoryInterface::class => \DI\create(Slim\Psr7\Factory\ResponseFactory::class),
 
     'db' => function () {
@@ -28,7 +26,7 @@ $container = $containerBuilder->build();
 \Slim\Factory\AppFactory::setContainer($container);
 
 $configuration = new Configuration([
-    'sources' => ['../app/Controllers'],
+    'sources' => ['../app/Controller'],
 ]);
 AppFactory::setRouteCollectorConfiguration($configuration);
 

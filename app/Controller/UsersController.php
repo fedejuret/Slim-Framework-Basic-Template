@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
-use App\Services\UserService;
+use App\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Jgut\Slim\Routing\Mapping\Attribute\Route;
-use Psr\Http\Message\ResponseFactoryInterface;
+use App\Middleware\AuthorizationHeaderMiddleware;
+use Jgut\Slim\Routing\Mapping\Attribute\Middleware;
 
 class UsersController extends Controller
 {
@@ -15,11 +16,12 @@ class UsersController extends Controller
     }
 
     #[Route(pattern: '/users')]
+    #[Middleware(AuthorizationHeaderMiddleware::class)]
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args): ResponseInterface
     {
         return $this->response($response, [
             'status' => 'works',
             'users' => $this->userService->all()
-        ], 200);
+        ]);
     }
 }

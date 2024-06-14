@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
-use App\Models\User;
+use App\Model\User;
 
 final class UserService
 {
