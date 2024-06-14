@@ -8,11 +8,11 @@ use Jgut\Slim\Routing\Mapping\Attribute\Route;
 
 class IndexController extends Controller
 {
-
-    #[Route(pattern: '/fede')]
+    #[Route(pattern: '/')]
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        $this->response->getBody()->write(json_encode(['some' => 'yes']));
-        return $this->response;
+        return $this->response([
+            'status' => 'works',
+        ], 200);
     }
 }
