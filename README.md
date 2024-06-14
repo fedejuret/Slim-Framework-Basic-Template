@@ -27,7 +27,7 @@ This project is a basic skeleton for developing an API using the Slim microframe
 2. Install project dependencies using Composer:
 
     ```bash
-    cd slim-api-project
+    cd Slim-Framework-Basic-Template
     composer install
     ```
 
