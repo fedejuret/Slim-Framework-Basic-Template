@@ -41,10 +41,10 @@ This project is a basic skeleton for developing an API using the Slim microframe
 
     ```dotenv
     DATABASE_DRIVER=mysql
-    DATABASE_HOST=172.19.0.1
-    DATABASE_USERNAME=root
-    DATABASE_PASSWORD=secret
-    DATABASE_NAME=hotelco0_motor
+    DATABASE_HOST=
+    DATABASE_USERNAME=
+    DATABASE_PASSWORD=
+    DATABASE_NAME=
     ```
 
 5. You're all set! Now you can run the development server:
