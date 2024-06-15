@@ -9,7 +9,7 @@ use Jgut\Slim\Routing\Mapping\Attribute\Route;
 use App\Middleware\AuthorizationHeaderMiddleware;
 use Jgut\Slim\Routing\Mapping\Attribute\Middleware;
 
-class UsersController extends Controller
+final class UsersController extends Controller
 {
     public function __construct(private readonly UserService $userService)
     {

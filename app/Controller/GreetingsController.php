@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Jgut\Slim\Routing\Mapping\Attribute\Route;
 
-class GreetingsController extends Controller
+final class GreetingsController extends Controller
 {
 
     #[Route(pattern: '/greeting/{name}')]

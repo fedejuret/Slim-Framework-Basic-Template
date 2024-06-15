@@ -2,10 +2,9 @@
 
 require '../vendor/autoload.php';
 
+use DI\ContainerBuilder;
 use Jgut\Slim\Routing\AppFactory;
 use Jgut\Slim\Routing\Configuration;
-use DI\ContainerBuilder;
-use function DI\autowire;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..', '.env');
 $dotenv->load();
@@ -28,6 +27,7 @@ $container = $containerBuilder->build();
 $configuration = new Configuration([
     'sources' => ['../app/Controller'],
 ]);
+
 AppFactory::setRouteCollectorConfiguration($configuration);
 
 $app = AppFactory::create();
@@ -41,5 +41,8 @@ $capsule->bootEloquent();
 
 $routeCollector = $app->getRouteCollector();
 $responseFactory = $app->getResponseFactory();
+
+$handlers = require __DIR__ . '/../config/exception_handler.php';
+$app->add(new \App\Exception\ExceptionMiddleware($handlers));
 
 $app->run();
