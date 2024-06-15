@@ -7,7 +7,8 @@
         "juliangut/slim-routing": "^3.2",
         "php-di/php-di": "^7.0",
         "illuminate/database": "^11.10",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "monolog/monolog": "^3.6"
     },
     "autoload": {
         "psr-4": {

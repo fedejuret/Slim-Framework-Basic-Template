@@ -22,6 +22,9 @@ $containerBuilder->useAutowiring(true);
 
 $container = $containerBuilder->build();
 
+$loggingConfig = require __DIR__ . '/../config/logging.php';
+\App\Logging\LoggerFactory::createLoggers($container, $loggingConfig);
+
 \Slim\Factory\AppFactory::setContainer($container);
 
 $configuration = new Configuration([
@@ -43,6 +46,6 @@ $routeCollector = $app->getRouteCollector();
 $responseFactory = $app->getResponseFactory();
 
 $handlers = require __DIR__ . '/../config/exception_handler.php';
-$app->add(new \App\Exception\ExceptionMiddleware($handlers));
+$app->add(new \App\Exception\ExceptionMiddleware($handlers, $container));
 
 $app->run();
