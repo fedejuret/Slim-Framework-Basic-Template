@@ -2,17 +2,28 @@
 
 namespace App\Exception;
 
+use Psr\Log\LoggerInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use App\Exception\Handler\ExceptionHandler;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use ReflectionClass;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
 
 final readonly class ExceptionMiddleware implements MiddlewareInterface
 {
-    public function __construct(private array $handlers)
+    private LoggerInterface $logger;
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function __construct(private array $handlers, private ContainerInterface $container)
     {
+        $this->logger = $this->container->get(LoggerInterface::class);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -20,7 +31,6 @@ final readonly class ExceptionMiddleware implements MiddlewareInterface
         try {
             return $handler->handle($request);
         } catch (\Throwable $exception) {
-
             if (empty($this->handlers)) {
                 return $this->fallBack($exception);
             }
