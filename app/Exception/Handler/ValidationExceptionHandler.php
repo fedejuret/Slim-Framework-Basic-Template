@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\Exception\Handler;
 
+use App\Exception\Exception\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpException as SlimHttpException;
 use Throwable;
 
-final class HttpExceptionHandler implements ExceptionHandler
+final class ValidationExceptionHandler implements ExceptionHandler
 {
     /**
      * Handle incoming exception.
      */
     public function handle(ServerRequestInterface $request, ResponseInterface $response, Throwable $exception): ResponseInterface
     {
-        $responseInterface = $response->withStatus($exception->getCode())->withHeader('Content-Type', 'application/json');
-        $responseInterface->getBody()->write($exception->getMessage());
+        $responseInterface = $response->withStatus(422)->withHeader('Content-Type', 'application/json');
+        $responseInterface->getBody()->write(json_encode([
+            'error' => json_decode($exception->getMessage(), true),
+        ], JSON_UNESCAPED_UNICODE));
 
         return $responseInterface;
     }
@@ -27,7 +29,7 @@ final class HttpExceptionHandler implements ExceptionHandler
      */
     public function mustHandle(Throwable $throwable): bool
     {
-        return $throwable instanceof SlimHttpException;
+        return $throwable instanceof ValidationException;
     }
 
     /**
