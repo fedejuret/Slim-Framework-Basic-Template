@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Exception\Handler\HttpExceptionHandler;
+
 return [
-    \App\Exception\Handler\HttpExceptionHandler::class
-    /** ... add more handlers here */
+    HttpExceptionHandler::class,
+    /* ... add more handlers here */
 ];

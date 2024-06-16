@@ -14,5 +14,11 @@
         "psr-4": {
             "App\\": "app/"
         }
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.59"
+    },
+    "scripts": {
+        "cs-fix": "php-cs-fixer fix $1"
     }
 }

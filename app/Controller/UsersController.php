@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
+use App\Middleware\AuthorizationHeaderMiddleware;
 use App\Service\UserService;
+use Jgut\Slim\Routing\Mapping\Attribute\Middleware;
+use Jgut\Slim\Routing\Mapping\Attribute\Route;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Jgut\Slim\Routing\Mapping\Attribute\Route;
-use App\Middleware\AuthorizationHeaderMiddleware;
-use Jgut\Slim\Routing\Mapping\Attribute\Middleware;
 
 final class UsersController extends Controller
 {
@@ -21,7 +23,7 @@ final class UsersController extends Controller
     {
         return $this->response($response, [
             'status' => 'works',
-            'users' => $this->userService->all()
+            'users' => $this->userService->all(),
         ]);
     }
 }
