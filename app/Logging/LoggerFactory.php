@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Logging;
 
-use ReflectionException;
-use Psr\Container\ContainerInterface;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use ReflectionClass;
+use ReflectionException;
 
 class LoggerFactory
 {
@@ -19,7 +23,7 @@ class LoggerFactory
             $params = $channel['params'];
 
             // Use reflection to instantiate the handler with the given parameters
-            $reflection = new \ReflectionClass($handlerClass);
+            $reflection = new ReflectionClass($handlerClass);
             $handler = $reflection->newInstanceArgs($params);
             $logger->pushHandler($handler);
             $container->set("logger.{$name}", $logger);
@@ -27,7 +31,7 @@ class LoggerFactory
             // Optionally set the default logger
             if ($name === $config['default']) {
                 $container->set(Logger::class, $logger);
-                $container->set(\Psr\Log\LoggerInterface::class, $logger);
+                $container->set(LoggerInterface::class, $logger);
             }
         }
     }
