@@ -15,8 +15,11 @@ abstract class Controller
      */
     protected function validate(Request $request, array $rules): null|array|object
     {
-        $data = $request->getParsedBody();
-        $request->getParsedBody()
+        $data = $request->getQueryParams();
+        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'])) {
+            $data = json_decode($request->getBody()->getContents(), true);
+        }
+
         $errors = [];
 
         foreach ($rules as $field => $rule) {
